@@ -2,9 +2,7 @@ import streamlit as st
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 
-# -----------------------------
-# Load ML training data
-# -----------------------------
+
 data = pd.read_csv("hospital_data.csv")
 waiting_data = pd.read_csv("waiting_time_data.csv")
 
@@ -14,7 +12,7 @@ y = data["bottleneck"]
 model = RandomForestClassifier(random_state=42)
 model.fit(X, y)
 
-# Train waiting-time model
+
 waiting_X = waiting_data[
     ["patients", "beds", "staff", "emergency_cases"]
 ]
@@ -28,16 +26,12 @@ waiting_model = RandomForestRegressor(
 
 waiting_model.fit(waiting_X, waiting_y)
 
-# -----------------------------
-# Load patient records
-# -----------------------------
+
 patients_file = "patients.csv"
 
 patients = pd.read_csv(patients_file)
 
-# -----------------------------
-# Hospital information
-# -----------------------------
+
 
 DEPARTMENT_RESOURCES = {
     "ICU": {
@@ -54,9 +48,7 @@ DEPARTMENT_RESOURCES = {
     }
 }
 
-# -----------------------------
-# Dashboard
-# -----------------------------
+
 st.title("🏥 Hospital Bottleneck Prediction System")
 
 st.header("Patient Registration")
@@ -65,9 +57,7 @@ st.header("Patient Registration")
 if "form_version" not in st.session_state:
     st.session_state.form_version = 0
 
-# -----------------------------
-# Patient Registration Form
-# -----------------------------
+
 
 with st.form(key=f"patient_form_{st.session_state.form_version}"):
 
@@ -88,9 +78,7 @@ with st.form(key=f"patient_form_{st.session_state.form_version}"):
     submitted = st.form_submit_button("➕ Admit Patient")
 
 
-# -----------------------------
-# Admit patient
-# -----------------------------
+
 
 if submitted:
 
@@ -123,17 +111,13 @@ if submitted:
         st.session_state.form_version += 1
 
         st.rerun()
-# -----------------------------
-# Current hospital statistics
-# -----------------------------
+
 
 admitted_patients = patients[
     patients["status"] == "Admitted"
 ]
 
-# -----------------------------
-# Display statistics
-# -----------------------------
+
 
 st.header("🏥 Current Hospital Status")
 
@@ -170,9 +154,7 @@ st.write("### Current Patients")
 
 st.dataframe(admitted_patients)
 
-# -----------------------------
-# Discharge Patient
-# -----------------------------
+
 
 st.subheader("🚪 Discharge Patient")
 
@@ -205,9 +187,7 @@ else:
 
     st.info("No admitted patients to discharge.")
 
-# -----------------------------
-# ML Predictions
-# -----------------------------
+
 
 st.header("🤖 AI Predictions")
 
@@ -230,12 +210,10 @@ for dept in ["ICU", "Emergency", "OPD"]:
         ]
     )
 
-    # Only predict when department has patients
+   
     if patient_count > 0:
 
-        # -----------------------------
-        # Predict waiting time
-        # -----------------------------
+       
 
         waiting_input = pd.DataFrame(
             [[
@@ -256,9 +234,7 @@ for dept in ["ICU", "Emergency", "OPD"]:
             waiting_input
         )[0]
 
-        # -----------------------------
-        # Predict bottleneck
-        # -----------------------------
+        
 
         bottleneck_input = pd.DataFrame(
             [[
@@ -287,9 +263,7 @@ for dept in ["ICU", "Emergency", "OPD"]:
 
         risk = probability[0][1] * 100
 
-        # -----------------------------
-        # Risk level
-        # -----------------------------
+       
 
         if risk >= 70:
             risk_level = "HIGH"
@@ -300,9 +274,7 @@ for dept in ["ICU", "Emergency", "OPD"]:
         else:
             risk_level = "LOW"
 
-        # -----------------------------
-        # Display prediction
-        # -----------------------------
+      
 
         st.subheader(f"🏥 {dept}")
 
@@ -335,9 +307,7 @@ for dept in ["ICU", "Emergency", "OPD"]:
                 "✅ No Bottleneck Predicted"
             )
 
-        # -----------------------------
-        # Recommendation
-        # -----------------------------
+      
 
         if risk_level == "HIGH":
 
