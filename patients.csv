@@ -1,0 +1,10 @@
+patient_id,name,department,emergency,status
+P001,Demo Patient,ICU,Yes,Admitted
+P002,Rahul,ICU,Yes,Discharged
+P003,Neha,ICU,Yes,Admitted
+P004,Shreya,ICU,Yes,Discharged
+P005,Maya,OPD,No,Discharged
+P006,Rohit,OPD,No,Admitted
+P007,Aditya,Emergency,Yes,Admitted
+P008,Sam,ICU,Yes,Admitted
+P009,Neha,OPD,No,Discharged
